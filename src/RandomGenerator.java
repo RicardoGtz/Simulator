@@ -14,7 +14,7 @@ public class RandomGenerator {
         this.Xn=3;
         this.sem=Xn;
         this.l=0;
-        for (int i=0;i<100;i++)
+        for (int i=0;i<300;i++)
             this.getNum();
     }
     //Metodo para reasiganr las variables
