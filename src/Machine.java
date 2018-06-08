@@ -27,6 +27,10 @@ public class Machine {
         this.totalRepairingTime+=aux;
     }
 
+    public void addTotalBreakingTime(double currentTime) {
+        this.totalBreakingTime+=currentTime-this.failureHour;
+    }
+
     public double getFailureHour() {
         return failureHour;
     }

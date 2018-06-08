@@ -38,7 +38,8 @@ public class Main {
         Machine aux;
         while (time<hrs){
             if(toRepairQueue.isEmpty()||repairmenInUse==s){
-                if(repairingQueue.isEmpty() || failureQueue.peek().getFailureHour()<repairingQueue.peek().getRepairHour()){
+                if(!failureQueue.isEmpty()&&
+                        (repairingQueue.isEmpty() || failureQueue.peek().getFailureHour()<repairingQueue.peek().getRepairHour())){
                     aux=failureQueue.poll();
                     time=aux.getFailureHour();
                     if(repairmenInUse<s){
@@ -66,5 +67,31 @@ public class Main {
                 System.out.println("Timepo: "+time+" Deja de esperar y repara");
             }
         }
+        System.out.println("***** Termina la simulacion ******");
+        System.out.println("Maquinas en cola de por reparar:"+toRepairQueue.size());
+        System.out.println("Maquinas en cola de reparacion: "+repairingQueue.size());
+        //Se vacian las colas en reparacion y por reparar
+        if(!repairingQueue.isEmpty())
+            while (!repairingQueue.isEmpty())
+                failureQueue.add(repairingQueue.poll());
+        if(!toRepairQueue.isEmpty())
+            while (!toRepairQueue.isEmpty()){
+                aux=toRepairQueue.poll();
+                aux.addTotalBreakingTime(time);
+                failureQueue.add(aux);
+            }
+        //Se calculan los costos de la simulacion
+        double breakCost=0;
+        while (!failureQueue.isEmpty()){
+            aux=failureQueue.poll();
+            breakCost+=aux.getTotalBreakingTime()+aux.getTotalRepairingTime();
+        }
+        breakCost=(breakCost/m);
+        System.out.println("Timpo promedio en falla: "+breakCost+"hrs.");
+        breakCost=breakCost*50;
+        System.out.println("El costo por maquinas en espera fue de: $"+breakCost);
+        double repairmenCost=time*s*10;
+        System.out.println("El costo por sueldo de trabajadores fue de: $"+repairmenCost);
+        System.out.println("El costo total de la simulacion fue de: $"+(repairmenCost+breakCost));
     }
 }
